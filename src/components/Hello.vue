@@ -1,94 +1,44 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
-  </div>
+  <div class="wrapper">
+    <button id="btn" class="" v-on:click="getJokes">Get List</button>
+        <div class="row">
+          <div v-for="promo in promoList" :key="promo.id">
+            <div class="col-md-4 cards">
+               <img src="https://placeimg.com/300/300/nature" class="img-responsive" alt="Random images placeholder">
+            <div>
+              <h3>{{ promo.title}}</h3>
+              <p>{{ promo.description }}</p>
+              <p>{{ promo.expires_on }}</p>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
-  name: 'HelloWorld Omni',
+  name: 'Omni',
   data () {
     return {
-      msg: 'Welcome to Omni.promo'
+      promoList: [],
+      loading: false
+    }
+  },
+  methods: {
+    getJokes: function () {
+      this.loading = true
+      axios.get('https://gqsd9tbafa.execute-api.ap-southeast-1.amazonaws.com/dev/deal')
+        .then((response) => {
+          this.loading = false
+          this.promoList = response.data.body
+        }, (error) => {
+          if (error) {
+            console.log(error)
+          }
+          this.loading = false
+        })
     }
   }
 }
